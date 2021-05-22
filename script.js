@@ -5,46 +5,70 @@ let computerPlay = () => {
 
 }
 
-// The deliberation fucntion which finds whether the Player won or Not 
+// The deliberation function which finds whether the Player won or Not 
 let playRound = (playerSelection ,computerSelection) => {
     // console.log(`${typeof(playerSelection)} - ${typeof(computerSelection)}`)
-    playerSelection = playerSelection.toLowerCase();
-    if ( playerSelection[0] == computerSelection[0]){
+    // playerSelection = playerSelection.toLowerCase();
+    if ( playerSelection === computerSelection){
         return 0;
-    } else if ((playerSelection[0] === 'r' && computerSelection[0] === 's') || 
-                (playerSelection[0] === 's' && computerSelection[0] === 'p') || 
-                (playerSelection[0] === 'p' && computerSelection[0] === 'r')){
+    } else if ((playerSelection === 'rock' && computerSelection[0] === 's') || 
+                (playerSelection === 'scissors' && computerSelection[0] === 'p') || 
+                (playerSelection === 'paper' && computerSelection[0] === 'r')){
         return 1;
     } else {
         return -1;
     }
 
 }
-
-// Game function which finds the First to Five and output the Win log to Console
-let game = () => {
-    let playerScore = 0;
-    let computerScore = 0;
+//btnEventListener - Deliberates the win or loss of the Game 
+function btnEventListener(e) {
+    
+    let playerSelection = this.getAttribute('id');
+    let computerSelection = computerPlay();
     let score;
+    console.log(playerSelection);
+    console.log(computerSelection);
 
-
-    while((playerScore < 5) && (computerScore < 5)){
-        console.log(`${playerScore} - ${computerScore}`)
-
-        let computerSelection = computerPlay();
-        let playerSelection = prompt("Enter the sign","here");
-        console.log(playerSelection);
-        console.log(computerSelection);
-        score = playRound(playerSelection, computerSelection);
-
-        if (score > 0){
-            playerScore ++;
-        } else if (score < 0){
-            computerScore++;
-        }
+    score = playRound(playerSelection, computerSelection);
+    if (score > 0){
+        playerScore ++;
+    } else if (score < 0){
+        computerScore++;
     }
+    if  (playerScore === 5){
+        scoreTag.textContent = `You won, Dave.`;
+        scoreTag.style.cssText = 'color:green;';
+    } else if (computerScore === 5) {
+        scoreTag.textContent = `You lost, Dave.`;
+        scoreTag.style.cssText = 'color:red;';
+    } else {
+        scoreTag.textContent = `${playerScore} - ${computerScore}`
+        return;
+    }
+    const playAgain = document.createElement('a')
+    playAgain.textContent = "Play Again?"
+    playAgain.style.cssText = "color:black; cursor:pointer; font-size:2rem;"
+    playAgain.addEventListener('mouseover', () => playAgain.style.textDecoration = "underline")
+    playAgain.addEventListener('mouseleave', () => playAgain.style.textDecoration = "none")
+    playAgain.addEventListener('click', () => game())
+    scoreTag.appendChild(playAgain);
+
+    playerScore = 0,computerScore = 0;
+    buttons.forEach(button => button.removeEventListener('click', btnEventListener));
+}
+// Game Initiation Start Function
+let game = () => {
+    scoreTag.style.cssText = 'color:black;';
+    scoreTag.textContent = `${playerScore} - ${computerScore}`
+    buttons.forEach(button => button.addEventListener('click', btnEventListener));
+
     console.log(`${playerScore} - ${computerScore}`)
-    return (playerScore === 5)? "Player Wins" : "Computer Wins";
 }
 
-console.log(game());
+
+let playerScore = 0;
+let computerScore = 0;
+const scoreTag = document.querySelector('#score')
+const buttons = document.querySelectorAll(".icon")
+
+game();
