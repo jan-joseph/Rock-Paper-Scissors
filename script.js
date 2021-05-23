@@ -7,8 +7,6 @@ let computerPlay = () => {
 
 // The deliberation function which finds whether the Player won or Not 
 let playRound = (playerSelection ,computerSelection) => {
-    // console.log(`${typeof(playerSelection)} - ${typeof(computerSelection)}`)
-    // playerSelection = playerSelection.toLowerCase();
     if ( playerSelection === computerSelection){
         return 0;
     } else if ((playerSelection === 'rock' && computerSelection[0] === 's') || 
@@ -22,12 +20,9 @@ let playRound = (playerSelection ,computerSelection) => {
 }
 //btnEventListener - Deliberates the win or loss of the Game 
 function btnEventListener(e) {
-    
     let playerSelection = this.getAttribute('id');
     let computerSelection = computerPlay();
     let score;
-    console.log(playerSelection);
-    console.log(computerSelection);
 
     score = playRound(playerSelection, computerSelection);
     if (score > 0){
@@ -61,8 +56,6 @@ let game = () => {
     scoreTag.style.cssText = 'color:black;';
     scoreTag.textContent = `${playerScore} - ${computerScore}`
     buttons.forEach(button => button.addEventListener('click', btnEventListener));
-
-    console.log(`${playerScore} - ${computerScore}`)
 }
 
 
